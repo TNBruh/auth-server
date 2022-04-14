@@ -20,3 +20,4 @@ Settings.toml
 Dockerfile
 docker-compose.*
 .dockerignore
+/dummy-server

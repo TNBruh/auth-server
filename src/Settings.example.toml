@@ -8,7 +8,8 @@ STORAGE_TYPE = "REDIS"     #options are REDIS, MEMCACHED, SERVER, LOCAL_MEMORY
 HOST_TYPE = "SERVER"
 HOST_IP = "127.0.0.1"
 HOST_PORT = 9000
-GET_USER_ROUTE = "/authentication/user"
+GET_USER_ROUTE = "/auth/user/<user_id>" #assuming you use a server. method: GET
+REGISTER_USER_ROUTE = "/auth/user"      #also assuming you use a server. method: POST
 HOST_PASSWORD = "sussy"
 
 # JWT settings
