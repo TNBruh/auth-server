@@ -1,0 +1,18 @@
+# storage settings
+STORAGE_HOST = "127.0.0.1"
+STORAGE_PORT = 6380
+STORAGE_PASSWORD = "sussy"
+STORAGE_TYPE = "REDIS"     #options are REDIS, MEMCACHED, SERVER, LOCAL_MEMORY
+
+# primary db or server
+HOST_TYPE = "SERVER"
+HOST_IP = "127.0.0.1"
+HOST_PORT = 9000
+GET_USER_ROUTE = "/authentication/user"
+HOST_PASSWORD = "sussy"
+
+# JWT settings
+JWT_KEY = "iaminconstantpainplshelp"
+CHECK_HAS_IS_REFRESH = false
+ACCESS_AGE = 600
+REFRESH_AGE = 432000
