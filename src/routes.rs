@@ -1,5 +1,4 @@
 use crate::models::*;
-use crate::CONFIG;
 use rocket::form::Form;
 use rocket::serde::json::Json;
 use rocket::{routes, Route};
@@ -7,7 +6,6 @@ use rocket::{routes, Route};
 #[post("/", format = "json", data = "<data>")]
 pub async fn login(data: Form<Login>) -> String {
     //fetch necessary data from the server or db
-    let conf = &CONFIG;
 
     //custom logic here. it must return result to indicate successful processing
 
