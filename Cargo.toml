@@ -14,3 +14,4 @@ tokio = { version = "1", features = ["full"] }
 anyhow = "1.0.56"
 config = "0.13.1"
 bcrypt = "0.12.1"
+lazy_static = "1.4.0"

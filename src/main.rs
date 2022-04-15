@@ -12,6 +12,21 @@ use std::collections::HashMap;
 extern crate rocket;
 #[macro_use]
 extern crate bcrypt;
+#[macro_use]
+extern crate lazy_static;
+
+lazy_static! {
+    static ref CONFIG: HashMap<String, String> = {
+        let settings = Config::builder()
+            .add_source(config::File::with_name("Settings"))
+            .build()
+            .unwrap();
+
+        settings
+            .try_deserialize::<HashMap<String, String>>()
+            .unwrap()
+    };
+}
 
 #[rocket::main]
 async fn main() -> Result<()> {
