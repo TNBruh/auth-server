@@ -1,5 +1,3 @@
-use rocket::futures::future::ok;
-
 mod models;
 mod routes;
 mod services;
@@ -10,8 +8,6 @@ use std::collections::HashMap;
 
 #[macro_use]
 extern crate rocket;
-#[macro_use]
-extern crate bcrypt;
 #[macro_use]
 extern crate lazy_static;
 

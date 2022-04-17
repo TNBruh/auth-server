@@ -8,7 +8,7 @@ use std::collections::HashMap;
 pub trait RequestCreate {
     async fn create(
         &self,
-        data: Either<String, Vec<String>>,
+        data: Either<&'static str, HashMap<&'static str, &'static str>>,
     ) -> Result<Either<String, HashMap<String, String>>>;
 }
 
@@ -16,7 +16,7 @@ pub trait RequestCreate {
 pub trait RequestRead {
     async fn read(
         &self,
-        data: Either<String, Vec<String>>,
+        data: Either<&'static str, HashMap<&'static str, &'static str>>,
     ) -> Result<Either<String, HashMap<String, String>>>;
 }
 
@@ -24,7 +24,7 @@ pub trait RequestRead {
 pub trait RequestUpdate {
     async fn update(
         &self,
-        data: Either<String, Vec<String>>,
+        data: Either<&'static str, HashMap<&'static str, &'static str>>,
     ) -> Result<Either<String, HashMap<String, String>>>;
 }
 
@@ -32,6 +32,6 @@ pub trait RequestUpdate {
 pub trait RequestDelete {
     async fn delete(
         &self,
-        data: Either<String, Vec<String>>,
+        data: Either<&'static str, HashMap<&'static str, &'static str>>,
     ) -> Result<Either<String, HashMap<String, String>>>;
 }
