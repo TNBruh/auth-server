@@ -1,15 +1,35 @@
+use std::collections::HashMap;
+
 use crate::models::*;
+use crate::services::structs;
+use either::Either;
 use rocket::form::Form;
-use rocket::serde::json::Json;
-use rocket::{routes, Route};
+use rocket::serde::de::value::MapDeserializer;
+use rocket::serde::json::serde_json;
+use rocket::{routes, Route, State};
 
 #[post("/", format = "json", data = "<data>")]
-pub async fn login(data: Form<Login>) -> String {
-    //fetch necessary data from the server or db
+pub async fn login(data: Form<Login>, host: &State<structs::Host>) -> String {
+    //extract login data
+    let login_data = data.into_inner();
 
-    //custom logic here. it must return result to indicate successful processing
+    //map login data into hash map
+    let login_map_wrapped = login_data.extract();
+    if login_map_wrapped.is_err() {
+        return String::from("invalid data");
+    }
+    let login_map = login_map_wrapped.unwrap();
 
-    //bcrypt hash check
+    let login_resp_wrapped = host.login(&login_map).await;
+    if login_resp_wrapped.is_err() {
+        return String::from("login failed");
+    }
+    let login_resp = login_resp_wrapped.unwrap();
+
+    let reply = match login_resp {
+        Either::Right(map) => {}
+        Either::Left(strn) => {}
+    };
 
     //create refresh token and access token
 
