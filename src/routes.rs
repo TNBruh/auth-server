@@ -13,30 +13,25 @@ pub async fn login(data: Form<Login>, host: &State<structs::Host>) -> String {
     //extract login data
     let login_data = data.into_inner();
 
-    //map login data into hash map
-    let login_map_wrapped = login_data.extract();
-    if login_map_wrapped.is_err() {
-        return String::from("invalid data");
+    //call login through global state
+    let login_attempt = host.login(&login_data).await;
+
+    match login_attempt {
+        //success arm
+        Ok(Either::Right(data)) => {
+            //user data
+            let user_data = data;
+
+            //create refresh token and access token
+
+            String::from("login")
+        } //fail arm
+        data => String::from("oopsies happened"),
     }
-    let login_map = login_map_wrapped.unwrap();
-
-    let login_resp_wrapped = host.login(&login_map).await;
-    if login_resp_wrapped.is_err() {
-        return String::from("login failed");
-    }
-    let login_resp = login_resp_wrapped.unwrap();
-
-    let reply = match login_resp {
-        Either::Right(map) => {}
-        Either::Left(strn) => {}
-    };
-
-    //create refresh token and access token
 
     //send refresh token to storage
 
     //if all passes; return all fetched data, access token, and refresh token
-    String::from("login")
 }
 
 #[put("/", format = "json", data = "<data>")]
