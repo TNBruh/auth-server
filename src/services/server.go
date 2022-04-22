@@ -1,18 +1,16 @@
 package services
 
-import (
-	"auth-server/models"
-	"auth-server/utils"
-	"fmt"
-)
+// "auth-server/models"
+// "auth-server/utils"
+import "fmt"
 
 var HostInstance *Host
 
 type serverType uint
 
 const (
-	redis serverType = iota
-	memcached
+	redisServer serverType = iota
+	memcachedServer
 	mainServer
 	localStorage
 )
@@ -31,23 +29,23 @@ func (h *Host) GetUserRoute() string {
 	return fmt.Sprintf("%v://%v:%v/%v", h.protocol, h.ip, h.port, h.getUserRoute)
 }
 
-func (h *Host) Login(data *models.User) (map[string]interface{}, error) {
+// func (h *Host) Login(data *models.User) (map[string]interface{}, error) {
 
-	userData, err := data.Get(nil, HostInstance.GetUserRoute(), HostInstance.Password)
-	if err != nil {
-		return map[string]interface{}{}, err
-	}
+// 	userData, err := data.Get(nil, HostInstance.GetUserRoute(), HostInstance.Password)
+// 	if err != nil {
+// 		return map[string]interface{}{}, err
+// 	}
 
-	pwHash, ok := userData["password"].(string)
-	if !ok {
-		return map[string]interface{}{}, fmt.Errorf("unable to parse password from userData")
-	}
+// 	pwHash, ok := userData["password"].(string)
+// 	if !ok {
+// 		return map[string]interface{}{}, fmt.Errorf("unable to parse password from userData")
+// 	}
 
-	isUser := utils.BcryptInstance.Compare(pwHash, data.Password)
+// 	isUser := utils.BcryptInstance.Compare(pwHash, data.Password)
 
-	if isUser {
-		return userData, nil
-	} else {
-		return map[string]interface{}{}, fmt.Errorf("sussy impostor")
-	}
-}
+// 	if isUser {
+// 		return userData, nil
+// 	} else {
+// 		return map[string]interface{}{}, fmt.Errorf("sussy impostor")
+// 	}
+// }

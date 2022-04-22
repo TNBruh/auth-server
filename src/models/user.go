@@ -1,10 +1,14 @@
 package models
 
 import (
+	"auth-server/services"
+	"auth-server/utils"
 	"encoding/json"
 	"fmt"
 	"net/http"
 	"strings"
+
+	"github.com/gomodule/redigo/redis"
 )
 
 type User struct {
@@ -35,4 +39,55 @@ func (u *User) Get(input interface{}, rawRoute string, authorizationHeader strin
 
 	return body, nil
 
+}
+
+func (u *User) Login() (map[string]interface{}, error) {
+	userData, err := u.Get(nil, services.HostInstance.GetUserRoute(), services.HostInstance.Password)
+	if err != nil {
+		return map[string]interface{}{}, err
+	}
+
+	pwHash, ok := userData["password"].(string)
+	if !ok {
+		return map[string]interface{}{}, fmt.Errorf("unable to parse password from userData")
+	}
+
+	isUser := utils.BcryptInstance.Compare(pwHash, u.Password)
+	if isUser {
+		//create token here, then append
+		accessToken, refreshToken, err := utils.JwtInstance.CreateAccessRefresh(userData)
+		if err != nil {
+			return map[string]interface{}{}, err
+		}
+		userData["access_token"] = accessToken
+		userData["refresh_token"] = refreshToken
+
+		//stores refresh token in cache
+		if utils.JwtInstance.GlobalLogout {
+			r := *(services.RedisInstance)
+			_, err := r.Do("SET", userData["id"].(string), refreshToken)
+			if err != nil {
+				return map[string]interface{}{}, err
+			}
+		}
+		return userData, nil
+	} else {
+		return map[string]interface{}{}, fmt.Errorf("sussy impostor")
+	}
+}
+
+func (u *User) GlobalCacheCheck(subId string, rToken string) bool {
+	r := *(services.RedisInstance)
+
+	_, err := redis.String(r.Do("GET", subId))
+	if err != nil {
+		return false
+	}
+
+	_, e := r.Do("SET", subId, rToken)
+	if e != nil {
+		return false
+	}
+
+	return true
 }

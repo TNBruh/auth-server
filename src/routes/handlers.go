@@ -2,7 +2,6 @@ package routes
 
 import (
 	"auth-server/models"
-	"auth-server/services"
 	// "fmt"
 	"net/http"
 
@@ -19,7 +18,7 @@ func loginHandler(c *gin.Context) {
 	}
 
 	//login
-	userData, err := services.HostInstance.Login(&user)
+	userData, err := user.Login()
 	if err != nil {
 		c.IndentedJSON(http.StatusInternalServerError, gin.H{"message": err.Error()})
 		return
